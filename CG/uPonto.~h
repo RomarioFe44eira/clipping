@@ -1,0 +1,15 @@
+//---------------------------------------------------------------------------
+
+#ifndef uPontoH
+#define uPontoH
+//---------------------------------------------------------------------------
+class Ponto{
+ public:
+  double x;
+  double y;
+
+  Ponto();
+  Ponto (double ax, double ay);
+
+};
+#endif

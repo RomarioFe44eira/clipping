@@ -1,0 +1,372 @@
+object Form1: TForm1
+  Left = 559
+  Top = 172
+  Width = 1128
+  Height = 582
+  Caption = 'Formul'#225'rio Principal'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Visible = True
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 520
+    Top = 8
+    Width = 61
+    Height = 16
+    Caption = 'Viewport'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 520
+    Top = 32
+    Width = 47
+    Height = 16
+    Caption = 'Mundo'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Panel1: TPanel
+    Left = 8
+    Top = 8
+    Width = 502
+    Height = 502
+    TabOrder = 0
+    object Image1: TImage
+      Left = 1
+      Top = 1
+      Width = 500
+      Height = 500
+      Align = alClient
+      OnMouseDown = Image1MouseDown
+      OnMouseMove = Image1MouseMove
+    end
+  end
+  object btnNovoPoligono: TButton
+    Left = 520
+    Top = 160
+    Width = 89
+    Height = 25
+    Caption = 'Novo Poligono'
+    TabOrder = 1
+    OnClick = btnNovoPoligonoClick
+  end
+  object ListBox1: TListBox
+    Left = 520
+    Top = 56
+    Width = 121
+    Height = 97
+    ItemHeight = 13
+    TabOrder = 2
+    OnClick = ListBox1Click
+  end
+  object btnMosta: TButton
+    Left = 616
+    Top = 160
+    Width = 75
+    Height = 25
+    Caption = 'Mostra'
+    TabOrder = 3
+    OnClick = btnMostaClick
+  end
+  object ListBox2: TListBox
+    Left = 648
+    Top = 56
+    Width = 121
+    Height = 97
+    ItemHeight = 13
+    TabOrder = 4
+  end
+  object Linhas: TRadioGroup
+    Left = 776
+    Top = 96
+    Width = 185
+    Height = 105
+    Caption = 'Linhas'
+    ItemIndex = 2
+    Items.Strings = (
+      'DDA'
+      'Bresenham'
+      'MoveTo')
+    TabOrder = 5
+  end
+  object btnTranslacao: TButton
+    Left = 920
+    Top = 56
+    Width = 65
+    Height = 21
+    Caption = 'Transla'#231#227'o'
+    TabOrder = 6
+    OnClick = btnTranslacaoClick
+  end
+  object Edit1: TEdit
+    Left = 776
+    Top = 56
+    Width = 65
+    Height = 21
+    TabOrder = 7
+  end
+  object Edit2: TEdit
+    Left = 848
+    Top = 56
+    Width = 65
+    Height = 21
+    TabOrder = 8
+  end
+  object btnEscalonamento: TButton
+    Left = 992
+    Top = 56
+    Width = 81
+    Height = 21
+    Caption = 'Escalonamento'
+    TabOrder = 9
+    OnClick = btnEscalonamentoClick
+  end
+  object PageControl1: TPageControl
+    Left = 536
+    Top = 224
+    Width = 457
+    Height = 289
+    ActivePage = TabSheet3
+    TabIndex = 2
+    TabOrder = 10
+    object TabSheet1: TTabSheet
+      Caption = 'Transforma'#231#227'o'
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Curvas'
+      ImageIndex = 1
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Mundo'
+      ImageIndex = 2
+      object Label3: TLabel
+        Left = 33
+        Top = 88
+        Width = 40
+        Height = 13
+        Caption = 'Minimo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 118
+        Top = 80
+        Width = 43
+        Height = 13
+        Caption = 'Maximo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label5: TLabel
+        Left = 15
+        Top = 112
+        Width = 10
+        Height = 16
+        Caption = 'X'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label6: TLabel
+        Left = 14
+        Top = 144
+        Width = 11
+        Height = 16
+        Caption = 'Y'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label7: TLabel
+        Left = 272
+        Top = 32
+        Width = 32
+        Height = 13
+        Caption = 'Zoom'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object edXmin: TEdit
+        Left = 32
+        Top = 112
+        Width = 89
+        Height = 21
+        TabOrder = 0
+        Text = '-250'
+      end
+      object edXmax: TEdit
+        Left = 128
+        Top = 112
+        Width = 89
+        Height = 21
+        TabOrder = 1
+        Text = '250'
+      end
+      object edYmin: TEdit
+        Left = 32
+        Top = 144
+        Width = 89
+        Height = 21
+        TabOrder = 2
+        Text = '-250'
+      end
+      object edYmax: TEdit
+        Left = 128
+        Top = 144
+        Width = 89
+        Height = 21
+        TabOrder = 3
+        Text = '250'
+      end
+      object btnAtualizaMundo: TButton
+        Left = 72
+        Top = 184
+        Width = 89
+        Height = 25
+        Caption = 'Atualiza Mundo'
+        TabOrder = 4
+        OnClick = btnAtualizaMundoClick
+      end
+      object btnDireita: TButton
+        Left = 352
+        Top = 104
+        Width = 41
+        Height = 25
+        Caption = '>'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial Black'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 5
+        OnClick = btnDireitaClick
+      end
+      object btnBaixo: TButton
+        Left = 296
+        Top = 104
+        Width = 41
+        Height = 25
+        Caption = 'v'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial Black'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 6
+        OnClick = btnBaixoClick
+      end
+      object btnCima: TButton
+        Left = 296
+        Top = 72
+        Width = 41
+        Height = 25
+        Caption = '^'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial Black'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 7
+        OnClick = btnCimaClick
+      end
+      object btnEsquerda: TButton
+        Left = 248
+        Top = 104
+        Width = 43
+        Height = 25
+        Caption = '<'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial Black'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 8
+        OnClick = btnEsquerdaClick
+      end
+      object btnReset: TButton
+        Left = 248
+        Top = 136
+        Width = 145
+        Height = 33
+        Caption = 'RESET'
+        TabOrder = 9
+        OnClick = btnResetClick
+      end
+      object btnMoreZoom: TButton
+        Left = 248
+        Top = 72
+        Width = 41
+        Height = 25
+        Caption = '+'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 10
+        OnClick = btnMoreZoomClick
+      end
+      object btnLessZoom: TButton
+        Left = 352
+        Top = 72
+        Width = 41
+        Height = 25
+        Caption = '-'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 11
+        OnClick = btnLessZoomClick
+      end
+      object edZoom: TEdit
+        Left = 248
+        Top = 48
+        Width = 137
+        Height = 21
+        TabOrder = 12
+        Text = '10'
+      end
+    end
+  end
+end

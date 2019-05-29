@@ -1,0 +1,252 @@
+#include <vcl.h>
+#pragma hdrstop
+#include "uFormPrincipal.h"
+#include "uPonto2.h"
+#include "uJanela.h"
+#include "uPoligono.h"
+#include "uDisplay.h"
+
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+
+
+TForm1 *Form1;
+Ponto pto;
+Poligono pol;
+Display display;
+
+Janela mundo(-250, -250, 250, 250);
+Janela vp(0, 0, 500, 500);
+
+bool novo = false;
+int contPoligonos = 1;
+
+double Xvp2W(int x, Janela m, Janela v){
+     return (x - v.xmin) / (v.xmax - v.xmin) * (m.xmax - m.xmin) + m.xmin;
+}
+
+double Yvp2W(int y, Janela m, Janela v){
+     return (1 - (y - v.ymin) / (v.ymax - v.ymin)) * (m.ymax - m.ymin) + m.ymin;
+}
+
+__fastcall TForm1::TForm1(TComponent* Owner): TForm(Owner){
+
+     //Inseri o P1 no poligono - vertical cima
+     pto.x = Xvp2W(250, mundo, vp);
+     pto.y = Yvp2W(0, mundo, vp);
+     pol.pontos.push_back(pto);
+
+     //Inseri o P2 no poligono
+     pto.x = Xvp2W(250, mundo, vp);
+     pto.y = Yvp2W(500, mundo, vp);
+     pol.pontos.push_back(pto);
+     pol.id = contPoligonos++;
+
+     display.poligonos.push_back(pol);
+     pol.pontos.clear();
+
+     //Inseri o P3 no poligono
+     pto.x = Xvp2W(0 , mundo, vp);
+     pto.y = Yvp2W(250, mundo, vp);
+     pol.pontos.push_back(pto);
+
+     //Inseri o P4 no poligono
+     pto.x = Xvp2W(500, mundo, vp);
+     pto.y = Yvp2W(250, mundo, vp);
+     pol.pontos.push_back(pto);
+     pol.id = contPoligonos++;
+
+     display.poligonos.push_back(pol);
+     pol.pontos.clear();
+
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+
+}
+
+void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y){
+     //EXECUTA QUANDO MOVIMENTADO O MOUSE SOBRE O OBJETO IMAGE
+     int xw, yw;
+
+     //COORDENADAS DE VIEWPORT
+     Label1->Caption = "(" + IntToStr(X) + "," + IntToStr(Y) + ")";
+
+     //COORDENADAS DE MUNDO
+     xw = Xvp2W(X, mundo, vp);
+     yw = Yvp2W(Y, mundo, vp);
+     Label2->Caption = "(" + FloatToStr(xw) + "," + FloatToStr(yw) + ")";
+}
+
+void __fastcall TForm1::btnMostaClick(TObject *Sender){
+     display.mostra(ListBox1);
+}
+
+void __fastcall TForm1::ListBox1Click(TObject *Sender){
+     display.poligonos[ListBox1->ItemIndex].mostra(ListBox2);
+}
+
+void __fastcall TForm1::btnNovoPoligonoClick(TObject *Sender){
+     novo = true;
+}
+
+void __fastcall TForm1::Image1MouseDown(TObject *Sender,TMouseButton Button, TShiftState Shift, int X, int Y){
+     if(novo){
+          if(Button == mbLeft){
+               //GRAVA OS PONTOS DO POLIGONO
+               pto.x = Xvp2W(X, mundo, vp);
+               pto.y = Yvp2W(Y, mundo, vp);
+               pol.pontos.push_back(pto);
+          }
+          else{
+               //CONCLUI O POLIGONO E LIBERA PARA UMA NOVA CRIA플O
+               novo = false;
+               pol.id = contPoligonos++;
+               display.poligonos.push_back(pol);
+               pol.pontos.clear();
+               display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+               display.mostra(ListBox1);
+          }
+     }
+     else{
+          ShowMessage("Aperte em novo poligono");
+     }
+}
+
+void __fastcall TForm1::btnAtualizaMundoClick(TObject *Sender){
+     //ATUALIZA O MUNDO
+     mundo.xmin = StrToInt(edXmin->Text);
+     mundo.xmax = StrToInt(edXmax->Text);
+     mundo.ymin = StrToInt(edYmin->Text);
+     mundo.ymax = StrToInt(edYmax->Text);
+
+     //Eixo vertical
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+
+     //eixo horizontal
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+
+     display.desenha(Image1->Canvas, mundo, vp ,Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnTranslacaoClick(TObject *Sender){
+     //REALIZA A TRANSLA플O DOS PONTOS DO POLIGONO
+     float dx, dy;
+     dx = StrToFloat(Edit1->Text);
+     dy = StrToFloat(Edit2->Text);
+     display.poligonos[ListBox1->ItemIndex].translacao(dx, dy);
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnEscalonamentoClick(TObject *Sender){
+     //REALIZA O ESCALONAMENTO DO DOS PONTOS DO POLIGONO
+     float sx,sy;
+     sx = StrToFloat(Edit1->Text);
+     sy = StrToFloat(Edit2->Text);
+     display.poligonos[ListBox1->ItemIndex].escalonamento(sx, sy);
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnEsquerdaClick(TObject *Sender){
+     //MOVIMENTA O EIXO PARA ESQUERDA
+     mundo.xmin = StrToInt(edXmin->Text) - 10;
+     mundo.xmax = StrToInt(edXmax->Text) - 10;
+     edXmin->Text = mundo.xmin;
+     edXmax->Text = mundo.xmax;
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnDireitaClick(TObject *Sender){
+     //MOVIMENTA O EIXO PARA DIREITA
+     mundo.xmin = StrToInt(edXmin->Text) + 10;
+     mundo.xmax = StrToInt(edXmax->Text) + 10;
+     edXmin->Text = mundo.xmin;
+     edXmax->Text = mundo.xmax;
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnBaixoClick(TObject *Sender){
+     //MOVIMENTA O EIXO PARA BAIXO
+     mundo.ymin = StrToInt(edYmin->Text) - 10;
+     mundo.ymax = StrToInt(edYmax->Text) - 10;
+     edYmin->Text = mundo.ymin;
+     edYmax->Text = mundo.ymax;
+
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnCimaClick(TObject *Sender){
+     //MOVIMENTA O EIXO PARA CIMA
+     mundo.ymin = StrToInt(edYmin->Text) + 10;
+     mundo.ymax = StrToInt(edYmax->Text) + 10;
+     edYmin->Text = mundo.ymin;
+     edYmax->Text = mundo.ymax;
+
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnResetClick(TObject *Sender){
+     //RESTAURA AS COORDENADAS DE MUNDO
+     mundo.xmin = -250;
+     mundo.xmax = 250;
+     mundo.ymin = -250;
+     mundo.ymax = 250;
+
+     edXmin->Text = mundo.xmin;
+     edXmax->Text = mundo.xmax;
+     edYmin->Text = mundo.ymin;
+     edYmax->Text = mundo.ymax;
+
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnMoreZoomClick(TObject *Sender){
+     //REALIZA A AMPLIA플O DO MUNDO
+     edXmin->Text = mundo.xmin = StrToInt(edXmin->Text) + StrToInt(edZoom->Text);
+     edXmax->Text = mundo.xmax = StrToInt(edXmax->Text) - StrToInt(edZoom->Text);
+     edYmin->Text = mundo.ymin = StrToInt(edYmin->Text) + StrToInt(edZoom->Text);
+     edYmax->Text = mundo.ymax = StrToInt(edYmax->Text) - StrToInt(edZoom->Text);
+
+     /*
+      edXmin->Text = mundo.xmin;
+      edXmax->Text = mundo.xmax;
+      edYmin->Text = mundo.ymin;
+      edYmax->Text = mundo.ymax;
+    */
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+}
+
+void __fastcall TForm1::btnLessZoomClick(TObject *Sender){
+     //REALIZA AMINORA플O DO MUNDO
+     edXmin->Text = mundo.xmin = StrToInt(edXmin->Text) - StrToInt(edZoom->Text);
+     edXmax->Text = mundo.xmax = StrToInt(edXmax->Text) + StrToInt(edZoom->Text);
+     edYmin->Text = mundo.ymin = StrToInt(edYmin->Text) - StrToInt(edZoom->Text);
+     edYmax->Text = mundo.ymax = StrToInt(edYmax->Text) + StrToInt(edZoom->Text);
+
+     display.poligonos[1].pontos[0].x = mundo.xmin;
+     display.poligonos[1].pontos[1].x = mundo.xmax;
+     display.poligonos[0].pontos[0].y = mundo.ymax;
+     display.poligonos[0].pontos[1].y = mundo.ymin;
+
+     display.desenha(Image1->Canvas, mundo, vp, Linhas -> ItemIndex);
+
+}
+
+
